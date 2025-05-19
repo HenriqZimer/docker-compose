@@ -1,0 +1,70 @@
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    restart: always
+    volumes:
+      - './data/postgres:/var/lib/postgresql/data'
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - henriqzimer
+
+  zabbix-server:
+    image: zabbix/zabbix-server-pgsql
+    container_name: zabbix-server
+    restart: always
+    depends_on:
+      - postgres
+    volumes:
+      - './data/zabbix/alertscripts:/usr/lib/zabbix/alertscripts'
+    ports:
+      - "10050:10050"
+    environment:
+      - DB_SERVER_HOST=${DB_SERVER_HOST}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - henriqzimer
+
+  zabbix-frontend:
+    container_name: zabbix-frontend
+    image: zabbix/zabbix-web-nginx-pgsql
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_SERVER_HOST=${DB_SERVER_HOST}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PHP_TZ=${PHP_TZ}
+      - ZBX_SERVER_HOST=${ZBX_SERVER_HOST}
+    networks:
+      - henriqzimer
+
+  zabbix-agent:
+    container_name: zabbix-agent
+    image: zabbix/zabbix-agent2
+    user: root
+    links:
+      - zabbix-server
+    restart: always
+    privileged: true
+    volumes:
+      - /var/run:/var/run
+    environment:
+      - ZBX_HOSTNAME=${ZBX_HOSTNAME}
+      - ZBX_SERVER_HOST=${ZBX_SERVER_HOST}
+    networks:
+      - henriqzimer
+    
+networks:
+  henriqzimer:
+    name: henriqzimer
+    external: true

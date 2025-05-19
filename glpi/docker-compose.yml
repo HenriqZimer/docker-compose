@@ -1,0 +1,36 @@
+services:
+  mariadb:
+    image: mariadb:10.8
+    container_name: mariadb
+    restart: unless-stopped
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+      - TZ=${TIMEZONE}
+    networks:
+      - henriqzimer
+
+  glpi:
+    image: diouxx/glpi
+    container_name: glpi
+    restart: unless-stopped
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - ./www:/var/www/html/glpi
+    depends_on:
+      - mariadb
+    ports:
+      - ${GLPI_PORT}:80
+    environment:
+      - TZ=${TIMEZONE}
+    networks:
+      - henriqzimer
+
+networks:
+  henriqzimer:
+    external: true
