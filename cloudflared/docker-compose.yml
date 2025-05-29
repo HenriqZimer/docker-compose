@@ -2,13 +2,9 @@ services:
   cloudflared: 
     image: cloudflare/cloudflared 
     container_name: cloudflared
-    restart: unless-stopped 
+    dns:
+      - 1.1.1.1
+    restart: always 
     command: tunnel run 
     environment: 
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
-    networks:
-      - henriqzimer
-
-networks:
-  henriqzimer:
-    external: true
