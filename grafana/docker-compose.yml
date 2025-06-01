@@ -3,20 +3,12 @@ services:
     image: grafana/grafana
     container_name: grafana
     restart: always
-    dns:
-      - 1.1.1.1
     volumes:
       - grafana_data:/var/lib/grafana
     ports:
       - ${GF_PORT}:3000
     environment: 
       - GF_INSTALL_PLUGINS=${GF_INSTALL_PLUGINS}
-    networks:
-      - henriqzimer
-
-networks:
-  henriqzimer:
-    external: true
 
 volumes:
   grafana_data:

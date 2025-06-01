@@ -9,8 +9,6 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
-    networks:
-      - henriqzimer
 
   zabbix-server:
     image: zabbix/zabbix-server-pgsql
@@ -27,8 +25,6 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
-    networks:
-      - henriqzimer
 
   zabbix-frontend:
     container_name: zabbix-frontend
@@ -45,8 +41,6 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - PHP_TZ=${PHP_TZ}
       - ZBX_SERVER_HOST=${ZBX_SERVER_HOST}
-    networks:
-      - henriqzimer
 
   zabbix-agent2:
     container_name: zabbix-agent2
@@ -56,8 +50,6 @@ services:
     privileged: true
     ports:
       - "10051:10051"
-    networks:
-      - henriqzimer
     environment:
       - ZBX_HOSTNAME=${ZBX_HOSTNAME}
       - ZBX_SERVER_HOST=${ZBX_SERVER_HOST}
@@ -68,8 +60,3 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /var/run:/var/run
-
-networks:
-  henriqzimer:
-    name: henriqzimer
-    external: true

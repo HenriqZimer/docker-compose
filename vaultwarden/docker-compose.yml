@@ -1,6 +1,6 @@
 services:
   vaultwarden:
-    image: vaultwarden/server:latest
+    image: vaultwarden/server
     container_name: vaultwarden
     restart: unless-stopped
     volumes:
@@ -19,9 +19,3 @@ services:
       - SMTP_USERNAME=${SMTP_USERNAME}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - DOMAIN=${DOMAIN}
-    networks:
-      - henriqzimer
-
-networks:
-  henriqzimer:
-    external: true

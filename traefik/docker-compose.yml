@@ -33,9 +33,3 @@ services:
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.middlewares=traefik-auth"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_USER}:${TRAEFIK_PASSWORD}"
-    networks:
-      - henriqzimer
-
-networks:
-  henriqzimer:
-    external: true
