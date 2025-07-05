@@ -1,8 +1,10 @@
-services: 
-  cloudflared: 
-    image: cloudflare/cloudflared 
+services:
+  cloudflared:
+    image: cloudflare/cloudflared
     container_name: cloudflared
-    restart: always 
-    command: tunnel run 
-    environment: 
+    dns:
+     -  1.1.1.1
+    restart: always
+    command: tunnel run
+    environment:
       - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
